@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiPower, FiTrash2 } from "react-icons/fi";
+import { FiPower, FiTrash2, FiEdit } from "react-icons/fi";
 
 import api from '../../services/api';
 
@@ -24,18 +24,23 @@ export default function Contacts() {
         })
     }, [email]);
 
-    function handleDeleteContact(contactName) {
+    function handleDeleteContact(contactId) {
         try {
             api.delete('contacts/contact', {
                 params: {
                     email: email,
-                    contactname: contactName
+                    contactId: contactId
                 }
             });
-            setContacts(contacts.filter(contact => contact.contactName !== contactName));
+            setContacts(contacts.filter(contact => contact.contactId !== contactId));
         } catch(error) {
             console.log(error);
         }
+    }
+
+    function handleUpdate(contactId) {
+        localStorage.setItem('contactId', contactId);
+        navigate('/contact/update');
     }
 
     function handleLogout() {
@@ -58,7 +63,7 @@ export default function Contacts() {
 
             <ul>
                 {contacts.map(contact => (
-                    <li key={contact.contactName}>
+                    <li key={contact.contactId}>
                     <strong>Contact name:</strong>
                     <p>{contact.contactName}</p>
                     <strong>Email:</strong>
@@ -67,9 +72,15 @@ export default function Contacts() {
                     <p>{contact.phoneOne}</p>
                     <strong>Phone2:</strong>
                     <p>{contact.phoneTwo}</p>
-                    <button onClick={() =>handleDeleteContact(contact.contactName)} type="button">
-                        <FiTrash2 size={20} color="#a8a8b3"/>
-                    </button>
+                    <div className="buttons">
+                        <button onClick={() =>handleUpdate(contact.contactId)} type="button">
+                            <FiEdit size={20} color="#6795F0"/>
+                        </button>
+                        <button onClick={() =>handleDeleteContact(contact.contactId)} type="button">
+                            <FiTrash2 size={20} color="#f06767"/>
+                        </button>
+                        
+                    </div>
                 </li>
                 ))}
             </ul>
