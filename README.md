@@ -29,4 +29,4 @@ The backend of this application is built using Java with SpringBoot and is avail
    ```bash
    npm start
 
-Note: To run tests on the interface, make sure the backend is running and on the right port.
+Note: To run tests on the interface, make sure the *backend* is also running and on the right port.
